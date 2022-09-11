@@ -1,6 +1,6 @@
 ---
 name: User story
-about: This is a card that defines a need and how to fulfill it (acceptance criteria)
+about: This is a card that defines a need and acceptance criteria.
 title: 'As a [ROLE], I want [OBJECTIVE], so that [MOTIVATION]'
 labels: user story
 assignees: ''
