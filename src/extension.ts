@@ -1,26 +1,85 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vsc from 'vscode';
+import { initialiseSchemaModule } from './schema/schema-core';
+import { initialiseAssetModule } from './assets/asset-core';
+import { initialiseQueryModule } from './queries/query-core';
+import { initialiseModuleModule } from './modules/module-core';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "smithy" is now active!');
+export async function activate(context: vsc.ExtensionContext) {
+  await initialiseSchemaModule(context);
+  await initialiseAssetModule(context);
+  await initialiseQueryModule(context);
+  await initialiseModuleModule(context);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('smithy.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Smithy!');
-	});
+  // context.subscriptions.push(vsc.commands.registerCommand('smithy.foo', async () => {
+  //   const files = await vsc.window.showOpenDialog({ canSelectFiles: true, canSelectFolders: false, canSelectMany: false });
+  //   if(!files || !(files[0] instanceof vsc.Uri) || !(files[0].path.endsWith('/template.json'))) {
+  //     return;
+  //   }
 
-	context.subscriptions.push(disposable);
+  //   const content = (await vsc.workspace.fs.readFile(files[0])).toString();
+  //   const allDocumentTemplatesObject = JSON.parse(content);
+  //   const normalisedObjects: Record<string, Record<string, any>> = {};
+  //   for(const [documentCategory, documentContainerObject] of Object.entries(allDocumentTemplatesObject)) {
+  //     const container: any = documentContainerObject;
+  //     const categoryTemplates: any = container.templates;
+      
+  //     const catObj: Record<string, any> = {};
+  //     normalisedObjects[documentCategory] = catObj;
+
+  //     for(const docType of container.types) {
+  //       const document: Record<string, any> = {};
+  //       catObj[docType] = document;
+
+  //       const docObj = container[docType];
+  //       const usedTemplates: string[] = docObj.templates;
+
+
+  //       for(const templateName of usedTemplates) {
+  //         for(const [key, value] of Object.entries(categoryTemplates[templateName])) {
+  //           document[key] = deepCopy(value);
+  //         }
+  //       }
+
+        
+  //       for(const [key, value] of Object.entries(docObj)) {
+  //         if(key === 'templates') {
+  //           continue;
+  //         }
+
+  //         document[key] = deepCopy(value);
+  //       }
+  //     }
+  //   }
+    
+  //   vsc.workspace.openTextDocument({ content: JSON.stringify(normalisedObjects, undefined, 2), language: 'json' });
+  // }));
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {}
+
+// function deepCopy<T>(instance : T) : T {
+//   if (instance === null){
+//     return instance;
+//   }
+
+//   // handle Array types
+//   if (instance instanceof Array){
+//       var cloneArr = [] as any[];
+//       (instance as any[]).forEach((value)  => {cloneArr.push(value);});
+//       // for nested objects
+//       return cloneArr.map((value: any) => deepCopy<any>(value)) as any;
+//   }
+//   // handle objects
+//   if (instance instanceof Object) {
+//       var copyInstance = { ...(instance as { [key: string]: any }
+//       ) } as { [key: string]: any };
+//       for (var attr in instance) {
+//           if ( (instance as Object).hasOwnProperty(attr)) { 
+//               copyInstance[attr] = deepCopy<any>((instance as any)[attr]);
+//           }
+//       }
+//       return copyInstance as T;
+//   }
+//   // handling primitive data types
+//   return instance;
+// }

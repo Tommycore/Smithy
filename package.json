@@ -1,5 +1,9 @@
 {
   "name": "smithy",
+  "author": {
+    "name": "Tommycore"
+  },
+  "publisher": "Tommycore",
   "displayName": "Smithy",
   "description": "A CMS for Foundry VTT inside Visual Studio Code",
   "version": "0.0.1",
@@ -10,39 +14,88 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:smithy.helloWorld"
+    "onView:smithy.assetView",
+    "onView:smithy.queryView",
+    "onView:smithy.schemaView",
+    "onCommand:smithy.foo",
+    "onCommand:smithy.refreshSchemaView",
+    "onCommand:smithy.createSchema",
+    "onFileSystem:type",
+    "workspaceContains:**/*.tab"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "smithy.helloWorld",
-        "title": "Hello World"
+        "category": "Smithy",
+        "command": "smithy.foo",
+        "title": "FOO !!!"
+      },
+      {
+        "category": "Smithy",
+        "command": "smithy.refreshSchemaView",
+        "title": "Refresh Schema View"
+      },
+      {
+        "category": "Smithy",
+        "command": "smithy.createSchema",
+        "title": "Create new Schema",
+        "icon": "$(add)"
+      },
+      {
+        "category": "Smithy",
+        "command": "smithy.deleteSchema",
+        "title": "Delete Schema",
+        "icon": "$(trash)"
+      },
+      {
+        "category": "Smithy",
+        "command": "smithy.buildProject",
+        "title": "Build Project",
+        "icon": "$(export)"
       }
     ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "smithy.createSchema",
+          "group": "inline",
+          "when": "viewItem == editableCollection"
+        },
+        {
+          "command": "smithy.deleteSchema",
+          "when": "viewItem == editableSchema"
+        },
+        {
+          "command": "smithy.buildProject",
+          "group": "inline",
+          "when": "viewItem == module"
+        }
+      ]
+    },
     "views": {
       "toolPanel": [
         {
-          "id": "smithy.resourceView",
-          "name": "Resource View",
+          "id": "smithy.queryView",
+          "name": "Queries",
           "visibility": "visible",
-          "size": 3
+          "size": 1
         },
         {
           "id": "smithy.assetView",
-          "name": "Asset View",
+          "name": "Assets",
           "visibility": "visible",
-          "size": 3
+          "size": 1
+        },
+        {
+          "id": "smithy.moduleView",
+          "name": "Modules",
+          "visibility": "visible",
+          "size": 1
         },
         {
           "id": "smithy.schemaView",
-          "name": "Schema View",
-          "visibility": "visible",
-          "size": 3
-        },
-        {
-          "id": "smithy.connectionView",
-          "name": "Connection View",
+          "name": "Schemas",
           "visibility": "visible",
           "size": 1
         }
@@ -56,13 +109,7 @@
           "icon": "./media/smithy_logo.svg"
         }
       ]
-    },
-    "viewsWelcome": [
-      {
-        "view": "smithy.connectionView",
-        "contents": "Hello!"
-      }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -77,25 +124,27 @@
   },
   "devDependencies": {
     "@types/ajv": "^1.0.0",
-    "@types/vscode": "^1.71.0",
+    "@types/flat": "^5.0.2",
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.1",
     "@types/nedb": "^1.8.12",
     "@types/node": "16.x",
+    "@types/vscode": "^1.71.0",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
+    "@vscode/test-electron": "^2.1.5",
     "eslint": "^8.20.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
-    "typescript": "^4.7.4",
     "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0",
-    "@vscode/test-electron": "^2.1.5"
+    "webpack-cli": "^4.10.0"
   },
   "dependencies": {
     "@yetzt/nedb": "^1.8.0",
     "ajv": "^6.12.6",
+    "flat": "^5.0.2",
     "uuid5": "^1.0.2"
   }
 }
